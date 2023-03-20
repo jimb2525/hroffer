@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_row">
+    <sp_row action="INSERT_OR_UPDATE">
+        <class_name/>
+        <order>1</order>
+        <sp_column/>
+        <sp_container display_value="Review Job Offer - Container 1">12b3f9cc1bbd2d10b5bd2fc02a4bcb1c</sp_container>
+        <sys_class_name>sp_row</sys_class_name>
+        <sys_created_by>workflow.factory</sys_created_by>
+        <sys_created_on>2023-03-20 20:20:57</sys_created_on>
+        <sys_id>7fb379cc1bbd2d10b5bd2fc02a4bcbb8</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>1</sys_name>
+        <sys_package display_value="HR Offer Application" source="x_snc_hr_offer_a_0">5b18c2861bede59088c964a5ec4bcbdc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offer Application">5b18c2861bede59088c964a5ec4bcbdc</sys_scope>
+        <sys_update_name>sp_row_7fb379cc1bbd2d10b5bd2fc02a4bcbb8</sys_update_name>
+        <sys_updated_by>workflow.factory</sys_updated_by>
+        <sys_updated_on>2023-03-20 20:20:57</sys_updated_on>
+    </sp_row>
+</record_update>
