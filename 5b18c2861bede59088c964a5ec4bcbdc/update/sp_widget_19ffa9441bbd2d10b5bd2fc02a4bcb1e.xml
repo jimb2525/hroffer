@@ -1,0 +1,814 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[api.controller=function($scope, spUtil) {
+	/* widget controller */
+	var c = this;
+
+	$scope.job_selected = {
+		displayValue: c.data.location_name, 
+		value: c.data.sys_id,
+		name: 'job_selected'
+	}
+
+	/*$scope.location = {
+		displayValue: c.data.name, 
+		value: c.data.sys_id,
+		name: 'location'
+	}*/
+	
+
+	$scope.$on("field.change", function(evt, parms) {
+		if (parms.field.name == 'job_selected') {
+			c.data.job_id = parms.newValue;
+			c.data.action = 'get_c_level';
+			c.server.update();
+		}
+	});
+
+	$scope.calculate = function() {
+		if ($scope.job_selected.value == '' || $scope.job_selected.value == undefined) {
+			alert('Please Select a Job Title');
+			return;
+		}
+
+		if ($scope.location.value == '' || $scope.location.value == undefined) {
+			alert('Please Select a Location');
+			return;
+		}
+
+		c.data.action = 'update_tool';
+		c.data.job_description = $scope.job_selected.displayValue;
+		c.data.job_id = $scope.job_selected.value;
+		c.data.location_id = $scope.location.value;
+		c.data.base_salary = $scope.base_salary;
+		c.data.lti_grant = $scope.lti_grant;
+		c.data.bonus = $scope.bonus;
+		c.server.update().then(function(response) {
+			//spUtil.update($scope);
+		})
+
+	}
+
+};]]></client_script>
+        <controller_as>c</controller_as>
+        <css>$brand-primary: #1c49c2;
+
+.higher {
+  background-color: #dbebf9;
+  font-weight: bold;
+}
+
+.lower {
+  background-color: #ef6461;
+  font-weight: bold;
+}
+
+.tool-container {
+	flex-wrap: wrap;
+}
+
+h3 {
+  margin-bottom: 30px;
+}
+
+.small-table {
+  font-size: 9px;
+}
+
+input {
+  width: 100%;
+  text-align: center;
+}
+
+.left-col-table th, 
+.right-col-table th {
+  width: 230px;
+}
+
+td {
+  text-align: center;
+}
+
+.table tbody tr td {
+  vertical-align: middle;
+}
+
+/*td span {
+  white-space: normal;
+  overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 1; /* number of lines to show 
+           line-clamp: 1; 
+   -webkit-box-orient: vertical;
+}*/
+
+button {
+  margin-bottom: 30px;
+}
+
+.results-container {
+  margin-bottom: 30px;
+  input {
+    margin-bottom: 20px;
+  }
+}
+
+label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+th {
+  background-color: #dbebf9;
+}
+
+.input-row {
+  background-color: $brand-primary;
+  th {
+    color: #FFF;
+    background-color: $brand-primary;
+  }
+}
+
+.btn {
+  border-radius: 0;
+}
+
+.btn-primary {
+  background-color: $brand-primary;
+  border-color: $brand-primary;
+  padding: 12px 45px;
+  border-radius: 44px;
+}
+
+.nested-table th, 
+.small-table th {
+  background-color: transparent;
+}
+  
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id/>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {
+  
+}]]></link>
+        <name>Review Job Offer Widget</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+	/* populate the 'data' object */
+	/* e.g., data.table = $sp.getValue('table'); */
+
+	data.updated = false;
+	
+	function getEligibility(career_level) {
+		var eligibilityGR = new GlideRecord('x_snc_hr_offer_a_0_career_level_eligibility');
+		eligibilityGR.addEncodedQuery('level=' + career_level);
+		eligibilityGR.query();
+		if (eligibilityGR.next()) {
+			var elig = eligibilityGR.getValue('eligible');
+			var temp = {};
+			temp.sti_eligible = elig == false ? 'This role is not eligible for an annual STI award.' : getSTI(career_level);
+			temp.bonus_eligible = elig == false ? 'This role is not eligible for a quarterly bonus.' : getBonus(career_level);
+			temp.sti_eligibility = false;
+			return temp;
+		}
+	}
+	
+	function getSTI(career_level) {
+		// Add logic to return right STI level
+		return '';
+	}
+	
+	function getBonus(career_level) {
+		// Add logic to return right bonus level
+		return '';
+	}
+
+	function getSalaryRange(grade, location) {
+		var temp = {};
+		var salaryGR = new GlideRecord('x_snc_hr_offer_a_0_salary_ranges');
+		salaryGR.addEncodedQuery('grade=' + grade + '^key=' + location);
+		salaryGR.query();
+		if (salaryGR.next()) {
+			temp.min = salaryGR.getDisplayValue('q1_minimum').split('$')[1];
+			temp.q2 = salaryGR.getDisplayValue('q2').split('$')[1];
+			temp.mid = salaryGR.getDisplayValue('midpoint').split('$')[1];
+			temp.q3 = salaryGR.getDisplayValue('q3').split('$')[1];
+		}
+		return temp;
+	}
+
+	if (input && input.action == 'get_c_level') {
+		var jobGR = new GlideRecord('x_snc_hr_offer_a_0_job_catalogue');
+		jobGR.addQuery('sys_id', input.job_id);
+		jobGR.query();
+		if (jobGR.next()) {
+			var level = jobGR.getDisplayValue('c_level').split('C')[1];
+			if (level < 4) {
+				data.bonus_disabled = true;
+			} else {
+				data.bonus_disabled = false;
+			}
+		}
+	}
+
+	if (input && input.action == 'update_tool') {
+		data.updated = true;
+		data.bridge_lti_grant = (input.base_salary * input.lti_grant) / 100;
+
+		var jobGR = new GlideRecord('x_snc_hr_offer_a_0_job_catalogue');
+		jobGR.addQuery('sys_id', input.job_id);
+		jobGR.query();
+		if (jobGR.next()) {
+			data.career_level = jobGR.getDisplayValue('c_level');
+			data.job_category = jobGR.getDisplayValue('job_category');
+			data.grade = jobGR.getDisplayValue('grade');
+			data.equity = jobGR.getValue('equity');
+		}		
+
+		data.eligibility = getEligibility(data.career_level);
+		data.base_salary_range = getSalaryRange(data.grade, input.location_id);
+
+		if (data.equity) {
+			data.lti_annual_grant = 11;			
+			data.new_hire_lti_grant = (Math.ceil(data.lti_annual_grant * input.base_salary));
+
+		} else {
+			data.lti_annual_grant = 'This role is not eligible for equity.';
+			data.new_hire_lti_grant = 'This role is not eligible for equity.';
+
+		}
+
+		if (data.equity && data.eligibility.bonus_eligible) {
+			data.target_total_comp = parseInt(input.base_salary) + parseInt(data.new_hire_lti_grant) + parseInt(data.bridge_lti_grant);
+		}
+
+		/* # of rows that have title and location code - Roster table */
+		data.role_and_location = '';
+		data.role = '';
+		data.comp_grade_and_function = '';
+		data.comp_grade_and_unit = '';
+		data.dataSc = '';
+		data.population_used = '';
+
+
+		var rosterGR = new GlideAggregate('x_snc_hr_offer_a_0_roster');
+		rosterGR.addEncodedQuery('job_function_description=' + input.job_description + '^location_code=' + input.location_id);
+		rosterGR.addAggregate('COUNT');
+		rosterGR.query();
+		if (rosterGR.next()) {
+			data.role_and_location = rosterGR.getAggregate('COUNT');
+		}
+
+		var seatleBased = false;
+		/* Seatle based position */
+
+		if (input.job_description != '' && !input.location_id.includes('SEA1')) {
+			//add calculation;
+		}
+
+		if (!seatleBased) {
+			/* # of rows that have the title and false in the Pilot Program column in roster table */
+			var rolesGR = new GlideAggregate('x_snc_hr_offer_a_0_roster');
+			rolesGR.addEncodedQuery('job_title_description' + input.job_description + '^pilot_program=false');
+			rolesGR.addAggregate('COUNT');
+			rolesGR.query();
+			if (rolesGR.next()) {
+				data.role = rolesGR.getAggregate('COUNT');
+			}
+
+			/* get job function from job catalog table */
+			var jobFunction;
+			var jobFuncGR = new GlideRecord('x_snc_hr_offer_a_0_job_catalogue');
+			jobFuncGR.addQuery('default_job_title=' + input.job_description);
+			jobFuncGR.query();
+			if (jobFuncGR.next()) {
+				jobFunction = jobFuncGR.getDisplayValue('function');
+				data.dataSc = jobFuncGR.getDisplayValue('data_scientist');
+			}
+
+			/* # of rows that have the GRADE & Consumer business service function & false in pilot program in Roster table */
+			var gradeFunctionGR = new GlideAggregate('x_snc_hr_offer_a_0_roster');
+			gradeFunctionGR.addEncodedQuery('compensation_grade=' + data.grade + '^business_function=' + jobFunction + '^pilot_program=false');
+			gradeFunctionGR.addAggregate('COUNT');
+			gradeFunctionGR.query();
+			if (gradeFunctionGR.next()) {
+				data.comp_grade_and_function = gradeFunctionGR.getAggregate('COUNT');
+			}
+
+			/*calculate comp grade and unit by looking first at the value of data scientist */
+			var gradeUnitFunctionGR = new GlideAggregate('x_snc_hr_offer_a_0_roster');
+			gradeUnitFunctionGR.addEncodedQuery('compensation_grade=' + data.grade + '^business_unit=' + data.dataSc + '^pilot_program=false');
+			gradeUnitFunctionGR.addAggregate('COUNT');
+			gradeUnitFunctionGR.query();
+			if (gradeUnitFunctionGR.next()) {
+				data.comp_grade_and_unit = gradeUnitFunctionGR.getAggregate('COUNT');
+			}
+
+			if (data.role_and_location >= 4) {
+				data.population_used = 'R&L';
+			} else if (data.role >= 3) {
+				data.population_used = 'R'
+			} else {
+				data.population_used = 'R - this should be empty. I put 3 to meet the condition and run the calculations'; /**** THIS SHOULD BE AN EMPTY STRING ****/
+			}
+
+			/* Calculate middle table values */
+			if (data.population_used == '') {
+				data.minimum = 'if population used is empty, minimum is empty.';
+				data.quarter = 'if population used is empty, minimum is empty.';
+				data.median = 'if population used is empty, minimum is empty.';
+				data.mean = 'if population used is empty, minimum is empty.';
+				data.three=quarters = 'if population used is empty, minimum is empty.';
+				data.maximum = 'if population used is empty, minimum is empty.';
+			} else {
+				var count = 0;
+				var salaries = [];
+				var salariesTotal = 0;
+				var rosterTableGR = new GlideRecord('x_snc_hr_offer_a_0_roster');
+				rosterTableGR.addEncodedQuery('include_incumbent_data=true');
+				rosterTableGR.orderBy('nationalized_salary');
+				rosterTableGR.query();
+				while (rosterTableGR.next()) {
+					if (count == 0) {
+						data.nationalized_salary = parseInt(rosterTableGR.getDisplayValue('nationalized_salary').split('$')[1]);
+					}
+					var salary = rosterTableGR.getDisplayValue('nationalized_salary').split('$')[1];
+					salariesTotal += salary;
+					salaries.push(salary);
+					count++;
+				}
+				
+				var colGR = new GlideRecord('x_snc_hr_offer_a_0_cost_of_living');
+				colGR.addQuery('structure_name=' + input.location_id);
+				colGR.orderBy('location_code');
+				colGR.query();
+				if (colGR.next()) {
+					data.cost_of_living = colGR.getDisplayValue('percent_of_national')/100;
+				}
+				
+				data.minimum = data.nationalized_salary * data.cost_of_living;
+				
+				var demoSalaries = ['0.33', '265', '265', '268.33', '356.67'];
+				var demoSalariesTotal = 1155.33;
+				var demoCount = 5;
+				var quarter_position = 0.25 * (demoCount + 1);
+				var three_q_position = 0.75 * (demoCount + 1)
+				var regex = /^[0-9]*$/;
+				if (regex.test(quarter_position)) {
+					data.quarter_salary = demoSalaries[quarter_position];
+					data.three_quarters_salary = demoSalaries[three_q_position];
+				} else {
+					var roundUpQ = Math.ceil(quarter_position) -1 ;
+					var roundDownQ = Math.floor(quarter_position) - 1;
+					data.quarter_salary = (parseInt(demoSalaries[roundUpQ]) + parseInt(demoSalaries[roundDownQ])) / 2;
+					
+					var roundUp3Q = Math.ceil(three_q_position) -1 ;
+					var roundDown3Q = Math.floor(three_q_position) - 1;
+					data.three_quarters_salary = (parseInt(demoSalaries[roundUp3Q]) + parseInt(demoSalaries[roundDown3Q])) / 2;
+				}
+				
+				data.quarter = Math.floor(data.quarter_salary * data.cost_of_living);
+				data.three_quarters = Math.floor(data.three_quarters_salary * data.cost_of_living);
+				
+				if (demoCount % 2 == 0) {
+					var medianTopPosition = Math.ceil(demoCount/2);
+					var medianBottomPosition = Math.floor(demoCount/2);
+					data.medianSalary = (demoSalaries[medianTopPosition] + demoSalaries[medianBottomPosition]) / 2;
+				} else {
+					var medianPosition = Math.floor(demoCount/2);
+					data.medianSalary = demoSalaries[medianPosition];
+				}
+				
+				data.median = Math.ceil(data.medianSalary * data.cost_of_living);
+				data.mean = Math.floor((demoSalariesTotal / demoCount) * data.cost_of_living); 
+				data.maximum = Math.ceil(demoSalaries[demoSalaries.length - 1] * data.cost_of_living);
+			
+				data.median_by = (((input.base_salary / (data.medianSalary * data.cost_of_living)) -1) * 100).toFixed(2);
+				if (data.median_by > 0) {
+					data.median_by_message = 'The Proposed Base Salary is Higher than the Internal Median by:'
+					data.median_higher = true;
+				} else {
+					data.median_higher = false;
+					data.median_by_message = 'The Proposed Base Salary is Lower than the Internal Median by:'
+				}
+				
+				data.internal_by = (((input.base_salary / (data.three_quarters_salary * data.cost_of_living)) -1) * 100).toFixed((2));
+				if (data.internal_by > 0) {
+					data.internal_higher = true;
+					data.internal_by_message = 'The Proposed Base Salary is Higher than the Internal 75th Percentile by:'
+				} else {
+					data.internal_higher = false;
+					data.internal_by_message = 'The Proposed Base Salary is Lower than the Internal 75th Percentile by:'
+				}
+				
+				data.base_midpoint = (((input.base_salary / data.base_salary_range.mid) -1) * 100).toFixed(2);
+				if (data.base_midpoint > 0) {
+					data.base_midpoint_message = 'The Proposed Base Salary is Higher than the Base Salary Range Midpoint by:';
+					data.base_midpoint_higher = true;
+				} else {
+					data.base_midpoint_higher = false;
+					data.base_midpoint_message = 'The Proposed Base Salary is Lower than the Base Salary Range Midpoint by:';
+				}
+				
+				
+			}
+
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	}
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>workflow.factory</sys_created_by>
+        <sys_created_on>2023-03-20 20:06:43</sys_created_on>
+        <sys_id>19ffa9441bbd2d10b5bd2fc02a4bcb1e</sys_id>
+        <sys_mod_count>205</sys_mod_count>
+        <sys_name>Review Job Offer Widget</sys_name>
+        <sys_package display_value="HR Offer Application" source="x_snc_hr_offer_a_0">5b18c2861bede59088c964a5ec4bcbdc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offer Application">5b18c2861bede59088c964a5ec4bcbdc</sys_scope>
+        <sys_update_name>sp_widget_19ffa9441bbd2d10b5bd2fc02a4bcb1e</sys_update_name>
+        <sys_updated_by>workflow.factory</sys_updated_by>
+        <sys_updated_on>2023-03-27 16:29:43</sys_updated_on>
+        <template><![CDATA[<h3 style="color: $brand-primary;">
+  Offer Tool
+</h3>
+<div class="row flex-row tool-container">
+  <div class="col-md-7 col-sm-12 left-col-table">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th>Offer Tool End User</th>
+            <td>Recruiter</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-responsive">
+      <h5>
+        Enter the following values:
+      </h5>
+      <table class="table table-bordered">
+        <tbody>
+          <tr class="input-row">
+            <th>Job Title</th>
+            <td>
+              <sn-record-picker 
+                                sn-model="job_selected"
+                                id="job_catalog"
+                                field="job_selected" 
+                                table="'x_snc_hr_offer_a_0_job_catalogue'" 
+                                display-field="'default_job_title'" 
+                                search-fields="'default_job_title'"
+                                page-size="30"
+                                value-field="'sys_id'"
+                                default-query="'default_job_titleISNOTEMPTY'"
+                                placeholder="${Select a Job Title}">
+              </sn-record-picker>
+            </td>
+          </tr>
+          <tr class="input-row">
+            <th>Location</th>
+            <td><sn-record-picker 
+                                  sn-model="location"
+                                  id="location"
+                                  field="location" 
+                                  table="'x_snc_hr_offer_a_0_cost_of_living'" 
+                                  display-field="'location_code'" 
+                                  search-fields="'location_code'"
+                                  page-size="30"
+                                  value-field="'structure_name'"
+                                  default-query=""
+                                  placeholder="${Select a Location}">
+              </sn-record-picker></td>
+          </tr>
+          <tr class="input-row">
+            <th>Base Salary</th>
+            <td><input type="text" id="base_salary" name="base_salary" ng-model="base_salary" placeholder="Enter Proposed Based Salary"></td>
+          </tr>
+          <tr class="input-row">
+            <th>Bridge LTI Grant %</th>
+            <td><input type="text" id="lti_grant" name="lti_grant" ng-model="lti_grant" placeholder="Enter Bridge Award"></td>
+          </tr>
+          <tr class="input-row">
+            <th>Sign on Bonus</th>
+            <!--<td><input type="text" id="bonus" name="bonus" ng-model="bonus" placeholder="Select a Sign on Bonus"></td>-->
+            <td><sn-record-picker 
+                                  sn-disabled="data.bonus_disabled"
+                                  id="location"
+                                  field="location" 
+                                  table="'x_snc_hr_offer_a_0_cost_of_living'" 
+                                  display-field="'location_code'" 
+                                  search-fields="'location_code'"
+                                  page-size="30"
+                                  value-field="'structure_name'"
+                                  default-query=""
+                                  placeholder="${Select a Sign on Bonus}">
+              </sn-record-picker></td>
+          </tr>
+          <tr>
+            <th>Job Category</th>
+            <td>{{data.job_category}}</td>
+          </tr>
+          <tr>
+            <th>New Hire LTI Grant $</th>
+            <td><span ng-if="data.updated">$</span>{{data.new_hire_lti_grant}}</td>
+          </tr>
+          <tr>
+            <th>LTI Annual Grant %</th>
+            <td>{{data.lti_annual_grant}}<span ng-if="data.updated">%</span></td>
+          </tr>
+          <tr>
+            <th>Bridge LTI Grant $</th>
+            <td><span ng-if="data.updated">$</span>{{data.bridge_lti_grant}}</td>
+          </tr>
+          <tr>
+            <th>STI %</th>
+            <td>{{data.eligibility.sti_eligible}}</td>
+          </tr>
+          <tr>
+            <th>Bonus %</th>
+            <td>{{data.eligibility.bonus_eligible}}</td>
+          </tr>
+          <tr>
+            <th>Career Level</th>
+            <td>{{data.career_level}}</td>
+          </tr>
+          <tr>
+            <th>Target Total Compensation</th>
+            <td><span ng-if="data.updated">$</span>{{data.target_total_comp}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th style="text-align: center; vertical-align: middle;" rowspan="6">Internal Data</th>
+            <th>Minimum</th>
+            <td><span ng-if="data.updated">$</span>{{data.minimum}}</td>
+          </tr>
+          <tr>
+            <th>25th</th>
+            <td><span ng-if="data.updated">$</span>{{data.quarter}}</td>
+          </tr>
+          <tr>
+            <th>Median</th>
+            <td><span ng-if="data.updated">$</span>{{data.median}}</td>
+          </tr>
+          <tr>
+            <th>Mean</th>
+            <td><span ng-if="data.updated">$</span>{{data.mean}}</td>
+          </tr>
+          <tr>
+            <th>75th</th>
+            <td><span ng-if="data.updated">$</span>{{data.three_quarters}}</td>
+          </tr>
+          <tr>
+            <th>Maximum</th>
+            <td><span ng-if="data.updated">$</span>{{data.maximum}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th style="text-align: center; vertical-align: middle;" rowspan="4">Base Salary Range</th>
+            <th>Minimum</th>
+            <td><span ng-if="data.updated">$</span>{{data.base_salary_range.min}}</td>
+          </tr>
+          <tr>
+            <th>Q2</th>
+            <td><span ng-if="data.updated">$</span>{{data.base_salary_range.q2}}</td>
+          </tr>
+          <tr>
+            <th>Midpoint</th>
+            <td><span ng-if="data.updated">$</span>{{data.base_salary_range.mid}}</td>
+          </tr>
+          <tr>
+            <th>Q3</th>
+            <td><span ng-if="data.updated">$</span>{{data.base_salary_range.q3}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-md-5 col-sm-12 right-col-table">
+    <div>
+      <button ng-click="calculate()" class="btn btn-primary">
+        Calculate
+      </button>
+    </div>
+    <div class="table-responsive">
+      <table ng-if="data.updated" class="table table-bordered">
+        <tr>
+          <td ng-class="{'higher': data.median_higher, 
+                        'lower': data.median_higher == false}">{{data.median_by_message}}</td>
+          <td ng-class="{'higher': data.median_higher, 
+                        'lower': data.median_higher == false}">{{data.median_by}}<span ng-if="data.updated">%</span></td>
+        </tr>
+        <tr>
+          <td ng-class="{'higher': data.internal_higher, 
+                        'lower': data.internal_higher == false}">{{data.internal_by_message}}</td>
+          <td ng-class="{'higher': data.internal_higher, 
+                        'lower': data.internal_higher == false}">{{data.internal_by}}<span ng-if="data.updated">%</span></td>
+        </tr>
+        <tr>
+          <td ng-class="{'higher': data.base_midpoint_higher, 
+                        'lower': data.base_midpoint_higher == false}">{{data.base_midpoint_message}}</td>
+          <td ng-class="{'higher': data.base_midpoint_higher, 
+                        'lower': data.base_midpoint_higher == false}">{{data.base_midpoint}}<span ng-if="data.updated">%</span></td>
+        </tr>
+      </table>
+    </div>
+    <h6 style="margin-top: 50px;">
+      Approval Criteria
+    </h6>
+    <div class="table-responsive">
+      <table class="table table-bordered small-table">
+        <tbody>
+          <tr>
+            <th>Element</th>
+            <th>Approval Authority</th>
+            <th>Exception</th>
+          </tr>
+          <tr>
+            <th>Career Level</th>
+            <td>Below Director</td>
+            <td>Director+</td>
+          </tr>
+          <tr>
+            <th>Salary</th>
+            <td><span>At or below internal incumbent 75th percentile or above range midpoint</span></td>
+            <td><span>Above internal incumbent 75th percentile or above range midpoint</span></td>
+          </tr>
+          <tr>
+            <th>Sign On</th>
+            <td colspan="2">
+              <span>Thresholds by career level (max amount and frequency)</span>
+              <div class="table-responsive">
+                <table class="table table-bordered nested-table">
+                  <tr>
+                    <th>Career Level</th>
+                    <th>Recruiter Threshold</th>
+                    <th>TA Leadership Threshold</th>
+                  </tr>
+                  <tr>
+                    <th>C04</th>
+                    <td>$1 (up to 50% frequency)</td>
+                    <td>$2 (limited exceptions)</td>
+                  </tr>
+                  <tr>
+                    <th>C05</th>
+                    <td>$2 (up to 50% frequency)</td>
+                    <td>$3 (limited exceptions)</td>
+                  </tr>
+                  <tr>
+                    <th>C06</th>
+                    <td>$4 (up to 50% frequency)</td>
+                    <td>$5 (limited exceptions)</td>
+                  </tr>
+                  <tr>
+                    <th>C07</th>
+                    <td>$6 (up to 50% frequency)</td>
+                    <td>$7 (limited exceptions)</td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+
+          </tr>
+          <tr>
+            <th>New Hire LTI</th>
+            <td>Standard</td>
+            <td><span>Non-Standard (increase new hire LTI and/or bridge award)</span></td>
+          </tr>
+          <tr>
+            <th>Location</th>
+            <td><span>Temporate remote work (non-green state_ or regular remote</span></td>
+            <td>Permanently Remote</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive">
+      <h6>
+        Seattle Approved Position Exceptions
+      </h6>
+      <div class="table-responsive">
+        <table class="table table-bordered small-table">
+          <tr>
+            <th>Career Level</th>
+            <th>Base Salary</th>
+            <th>LTI (New Hire & Annual)</th>
+            <th>LTI Bridge Award</th>
+            <th>Sign on Bonus (as % of base)</th>
+          </tr>
+          <tr>
+            <th>C04</th>
+            <td>$1</td>
+            <td>1%</td>
+            <td>Exceptions only</td>
+            <td>$0.50</td>
+          </tr>
+          <tr>
+            <th>C05</th>
+            <td>$2</td>
+            <td>2%</td>
+            <td>5%</td>
+            <td>$0.75</td>
+          </tr>
+          <tr>
+            <th>C06</th>
+            <td>$3</td>
+            <td>3%</td>
+            <td>6%</td>
+            <td>$0.80</td>
+          </tr>
+          <tr>
+            <th>C07</th>
+            <td>$4</td>
+            <td>4%</td>
+            <td>7%</td>
+            <td>$0.90</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--
+<div style="font-weight: bold;">
+  <p>
+    LOGGING SOME VALUES
+  </p>
+  <p>
+    Role and location: {{data.role_and_location}}
+  </p>
+  <p>
+    Role: {{data.role}}
+  </p>
+  <p>
+    Compg rade and function: {{data.comp_grade_and_function}}
+  </p>
+  <p>
+    Comp grade and unit: {{data.comp_grade_and_unit}}
+  </p>
+  <p>
+    Data SC: {{data.dataSc}}
+  </p>
+  <p>
+    Population used: {{data.population_used}}
+  </p>
+</div>
+-->
+
+
+
+
+
+
+
+
+
+
+
+]]></template>
+    </sp_widget>
+</record_update>
