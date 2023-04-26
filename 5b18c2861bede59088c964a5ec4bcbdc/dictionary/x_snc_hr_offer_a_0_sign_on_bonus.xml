@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Sign On Bonus" max_length="40" name="x_snc_hr_offer_a_0_sign_on_bonus" sizeclass="11" type="collection">
+        <element attributes="edge_encryption_enabled=true" label="Career Level" max_length="40" name="career_level" type="string"/>
+        <element attributes="edge_encryption_enabled=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Recruiter" max_length="40" name="recruiter" type="string"/>
+        <element label="SEA" max_length="40" name="sea" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="TA Leadership" max_length="40" name="ta_leadership" type="string"/>
+    </element>
+</database>

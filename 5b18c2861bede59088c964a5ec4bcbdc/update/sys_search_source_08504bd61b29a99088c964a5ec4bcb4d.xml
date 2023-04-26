@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_search_source">
+    <sys_search_source action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <condition table="x_snc_hr_offer_a_0_roster">active=true</condition>
+        <group/>
+        <name>HR Offer Application - x_snc_hr_offer_a_0_roster</name>
+        <roles/>
+        <source_table>x_snc_hr_offer_a_0_roster</source_table>
+        <sys_class_name>sys_search_source</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-03-15 15:26:06</sys_created_on>
+        <sys_id>08504bd61b29a99088c964a5ec4bcb4d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>HR Offer Application - x_snc_hr_offer_a_0_roster</sys_name>
+        <sys_package display_value="HR Offer Application" source="x_snc_hr_offer_a_0">5b18c2861bede59088c964a5ec4bcbdc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offer Application">5b18c2861bede59088c964a5ec4bcbdc</sys_scope>
+        <sys_update_name>sys_search_source_08504bd61b29a99088c964a5ec4bcb4d</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-03-15 15:26:06</sys_updated_on>
+    </sys_search_source>
+    <sys_translated_text action="delete_multiple" query="documentkey=08504bd61b29a99088c964a5ec4bcb4d"/>
+</record_update>

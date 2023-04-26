@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element extends="sys_import_set_row" label="Bonus Eligibility Import" max_length="40" name="x_snc_hr_offer_a_0_ihub_import_e2aa7bc61bad299088c964a5ec4bcbbb" sizeclass="0" type="collection">
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Job Title Description" label="Job Title Description" max_length="44" name="u_job_title_description" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=%" label="%" max_length="40" name="u__" type="string"/>
+    </element>
+</database>

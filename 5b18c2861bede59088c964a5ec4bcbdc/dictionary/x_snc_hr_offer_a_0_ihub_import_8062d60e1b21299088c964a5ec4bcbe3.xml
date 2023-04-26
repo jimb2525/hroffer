@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element extends="sys_import_set_row" label="Job Catalogue Import" max_length="40" name="x_snc_hr_offer_a_0_ihub_import_8062d60e1b21299088c964a5ec4bcbe3" sizeclass="0" type="collection">
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Business Unit" label="Business Unit" max_length="40" name="u_business_unit" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=C-Level" label="C-Level" max_length="40" name="u_c_level" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Data Scientist" label="Data Scientist" max_length="40" name="u_data_scientist" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Default Job Title" label="Default Job Title" max_length="76" name="u_default_job_title" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Equity?" label="Equity?" max_length="40" name="u_equity_" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Function" label="Function" max_length="42" name="u_function" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Grade" label="Grade" max_length="40" name="u_grade" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Job Category" label="Job Category" max_length="40" name="u_job_category" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Job Code" label="Job Code" max_length="40" name="u_job_code" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Job Profile" label="Job Profile" max_length="54" name="u_job_profile" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Management Level" label="Management Level" max_length="40" name="u_management_level" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Pay Rate Type" label="Pay Rate Type" max_length="40" name="u_pay_rate_type" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Seattle Pilot Position" label="Seattle Pilot Position" max_length="40" name="u_seattle_pilot_position" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Staffing Model" label="Staffing Model" max_length="85" name="u_staffing_model" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=WD Function" label="WD Function" max_length="40" name="u_wd_function" type="string"/>
+    </element>
+</database>

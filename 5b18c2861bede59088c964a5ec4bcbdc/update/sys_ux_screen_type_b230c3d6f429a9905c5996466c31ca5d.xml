@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ux_screen_type">
+    <sys_ux_screen_type action="INSERT_OR_UPDATE">
+        <description/>
+        <name>Dashboard</name>
+        <sys_class_name>sys_ux_screen_type</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-03-15 15:25:46</sys_created_on>
+        <sys_id>b230c3d6f429a9905c5996466c31ca5d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Dashboard</sys_name>
+        <sys_package display_value="HR Offer Application" source="x_snc_hr_offer_a_0">5b18c2861bede59088c964a5ec4bcbdc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offer Application">5b18c2861bede59088c964a5ec4bcbdc</sys_scope>
+        <sys_update_name>sys_ux_screen_type_b230c3d6f429a9905c5996466c31ca5d</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-03-15 15:25:46</sys_updated_on>
+    </sys_ux_screen_type>
+    <sys_translated_text action="delete_multiple" query="documentkey=b230c3d6f429a9905c5996466c31ca5d"/>
+</record_update>

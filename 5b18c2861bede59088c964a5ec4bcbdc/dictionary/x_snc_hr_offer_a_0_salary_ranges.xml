@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Salary Ranges" max_length="40" name="x_snc_hr_offer_a_0_salary_ranges" sizeclass="144" text_index="true" type="collection">
+        <element label="Calc Spread" max_length="15" name="calc_spread" type="decimal"/>
+        <element attributes="edge_encryption_enabled=true" label="Description " max_length="40" name="description" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Grade" max_length="40" name="grade" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label=" Key" max_length="40" name="key" type="string"/>
+        <element attributes="omit_sys_original=true" label="Midpoint" max_length="20" name="midpoint" type="currency"/>
+        <element attributes="edge_encryption_enabled=true" label="Midpoint Differential" max_length="40" name="midpoint_differential" type="string"/>
+        <element attributes="edge_encryption_enabled=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
+        <element attributes="omit_sys_original=true" label="Q1 Minimum" max_length="20" name="q1_minimum" type="currency"/>
+        <element attributes="omit_sys_original=true" label="Q2" max_length="20" name="q2" type="currency"/>
+        <element attributes="omit_sys_original=true" label="Q3" max_length="20" name="q3" type="currency"/>
+        <element attributes="omit_sys_original=true" label="Q4 Maximum" max_length="20" name="q4_maximum" type="currency"/>
+        <element attributes="edge_encryption_enabled=true" label="Structure " max_length="40" name="structure" type="string"/>
+    </element>
+</database>

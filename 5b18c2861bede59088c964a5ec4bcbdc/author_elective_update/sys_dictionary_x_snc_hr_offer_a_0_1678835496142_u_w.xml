@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_dictionary action="DELETE" element="u_w" table="x_snc_hr_offer_a_0_1678835496142">
+        <active>true</active>
+        <array>false</array>
+        <array_denormalized>false</array_denormalized>
+        <attributes>edge_encryption_enabled=true,import_attribute_name=W</attributes>
+        <audit>false</audit>
+        <calculation/>
+        <choice>0</choice>
+        <choice_field/>
+        <choice_table/>
+        <column_label>W</column_label>
+        <comments/>
+        <create_roles/>
+        <default_value/>
+        <defaultsort/>
+        <delete_roles/>
+        <dependent/>
+        <dependent_on_field/>
+        <display>false</display>
+        <dynamic_creation>false</dynamic_creation>
+        <dynamic_creation_script/>
+        <dynamic_default_value/>
+        <dynamic_ref_qual/>
+        <element>u_w</element>
+        <element_reference>false</element_reference>
+        <foreign_database/>
+        <function_definition/>
+        <function_field>false</function_field>
+        <internal_type display_value="String">string</internal_type>
+        <mandatory>false</mandatory>
+        <max_length>40</max_length>
+        <name>x_snc_hr_offer_a_0_1678835496142</name>
+        <next_element/>
+        <primary>false</primary>
+        <read_only>false</read_only>
+        <read_roles/>
+        <reference/>
+        <reference_cascade_rule/>
+        <reference_floats>false</reference_floats>
+        <reference_key/>
+        <reference_qual/>
+        <reference_qual_condition/>
+        <reference_type/>
+        <sizeclass/>
+        <spell_check>false</spell_check>
+        <staged>false</staged>
+        <sys_class_name>sys_dictionary</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-03-14 23:11:39</sys_created_on>
+        <sys_id>65416b461be9299088c964a5ec4bcb26</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>W</sys_name>
+        <sys_package display_value="HR Offer Application" source="x_snc_hr_offer_a_0">5b18c2861bede59088c964a5ec4bcbdc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offer Application">5b18c2861bede59088c964a5ec4bcbdc</sys_scope>
+        <sys_update_name>sys_dictionary_x_snc_hr_offer_a_0_1678835496142_u_w</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-03-14 23:11:39</sys_updated_on>
+        <table_reference>false</table_reference>
+        <text_index>false</text_index>
+        <unique>false</unique>
+        <use_dependent_field>false</use_dependent_field>
+        <use_dynamic_default>false</use_dynamic_default>
+        <use_reference_qualifier>simple</use_reference_qualifier>
+        <virtual>false</virtual>
+        <widget/>
+        <write_roles/>
+        <xml_view>false</xml_view>
+    </sys_dictionary>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="HR Offer Application">5b18c2861bede59088c964a5ec4bcbdc</application>
+        <file_path/>
+        <instance_id>232313afdbc62c909df22f17d4961962</instance_id>
+        <instance_name>jbelote11demo</instance_name>
+        <name>sys_dictionary_x_snc_hr_offer_a_0_1678835496142_u_w</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update><sys_dictionary action="INSERT_OR_UPDATE" element="u_w" table="x_snc_hr_offer_a_0_1678835496142"><active>true</active><array>false</array><array_denormalized>false</array_denormalized><attributes>edge_encryption_enabled=true,import_attribute_name=W</attributes><audit>false</audit><calculation/><choice>0</choice><choice_field/><choice_table/><column_label>W</column_label><comments/><create_roles/><default_value/><defaultsort/><delete_roles/><dependent/><dependent_on_field/><display>false</display><dynamic_creation>false</dynamic_creation><dynamic_creation_script/><dynamic_default_value/><dynamic_ref_qual/><element>u_w</element><element_reference>false</element_reference><foreign_database/><function_definition/><function_field>false</function_field><internal_type display_value="String">string</internal_type><mandatory>false</mandatory><max_length>40</max_length><name>x_snc_hr_offer_a_0_1678835496142</name><next_element/><primary>false</primary><read_only>false</read_only><read_roles/><reference/><reference_cascade_rule/><reference_floats>false</reference_floats><reference_key/><reference_qual/><reference_qual_condition/><reference_type/><sizeclass/><spell_check>false</spell_check><staged>false</staged><sys_class_name>sys_dictionary</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2023-03-14 23:11:39</sys_created_on><sys_id>65416b461be9299088c964a5ec4bcb26</sys_id><sys_mod_count>0</sys_mod_count><sys_name>W</sys_name><sys_package display_value="HR Offer Application" source="x_snc_hr_offer_a_0">5b18c2861bede59088c964a5ec4bcbdc</sys_package><sys_policy/><sys_scope display_value="HR Offer Application">5b18c2861bede59088c964a5ec4bcbdc</sys_scope><sys_update_name>sys_dictionary_x_snc_hr_offer_a_0_1678835496142_u_w</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2023-03-14 23:11:39</sys_updated_on><table_reference>false</table_reference><text_index>false</text_index><unique>false</unique><use_dependent_field>false</use_dependent_field><use_dynamic_default>false</use_dynamic_default><use_reference_qualifier>simple</use_reference_qualifier><virtual>false</virtual><widget/><write_roles/><xml_view>false</xml_view></sys_dictionary></record_update>]]></payload>
+        <payload_hash>-409144149</payload_hash>
+        <record_name>HR Offer A 0 1678835496142.W</record_name>
+        <reverted_from/>
+        <source>db18c2861bede59088c964a5ec4bcbe2</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-03-14 23:11:39</sys_created_on>
+        <sys_id>f9416b461be9299088c964a5ec4bcb97</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>186e264c3960000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-03-14 23:11:39</sys_updated_on>
+        <type>Dictionary</type>
+        <update_guid>75416b46b7e92990a059bf31cf60e497</update_guid>
+        <update_guid_history>75416b46b7e92990a059bf31cf60e497:-409144149</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-03-14 23:12:15</sys_created_on>
+        <sys_db_object display_value="" name="sys_dictionary">sys_dictionary</sys_db_object>
+        <sys_id>6fa74ca1ba2a4ee0b4cd905b82b08400</sys_id>
+        <sys_metadata>65416b461be9299088c964a5ec4bcb26</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>W</sys_name>
+        <sys_package display_value="HR Offer Application" source="x_snc_hr_offer_a_0">5b18c2861bede59088c964a5ec4bcbdc</sys_package>
+        <sys_parent display_value="">ad412b461be9299088c964a5ec4bcbe9</sys_parent>
+        <sys_policy/>
+        <sys_scope display_value="HR Offer Application">5b18c2861bede59088c964a5ec4bcbdc</sys_scope>
+        <sys_scope_delete display_value="">36e47afa1d0f4f908e92533ff2aa88c4</sys_scope_delete>
+        <sys_update_name>sys_dictionary_x_snc_hr_offer_a_0_1678835496142_u_w</sys_update_name>
+        <sys_update_version display_value="sys_dictionary_x_snc_hr_offer_a_0_1678835496142_u_w">f9416b461be9299088c964a5ec4bcb97</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-03-14 23:12:15</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

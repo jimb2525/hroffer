@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="C Level Sign On Bonus Amount" max_length="40" name="x_snc_hr_offer_a_0_c_level_sign_on_bonus_amount" sizeclass="8" type="collection">
+        <element attributes="omit_sys_original=true" label="C04" max_length="20" name="c04" type="currency"/>
+        <element attributes="omit_sys_original=true" label="C05" max_length="20" name="c05" type="currency"/>
+        <element attributes="omit_sys_original=true" label="C06" max_length="20" name="c06" type="currency"/>
+        <element attributes="omit_sys_original=true" label="C07" max_length="20" name="c07" type="currency"/>
+        <element attributes="edge_encryption_enabled=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
+    </element>
+</database>

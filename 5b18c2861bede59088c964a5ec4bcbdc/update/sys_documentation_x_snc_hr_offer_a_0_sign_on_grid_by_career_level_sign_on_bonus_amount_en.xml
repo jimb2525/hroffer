@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="sign_on_bonus_amount" label="Sign on bonus amount" language="en" table="x_snc_hr_offer_a_0_sign_on_grid_by_career_level">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>sign_on_bonus_amount</element>
+            <help/>
+            <hint/>
+            <label>Sign on bonus amount</label>
+            <language>en</language>
+            <name>x_snc_hr_offer_a_0_sign_on_grid_by_career_level</name>
+            <plural/>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>workflow.factory</sys_created_by>
+            <sys_created_on>2023-03-28 13:06:40</sys_created_on>
+            <sys_id>1c1d1da21bb1a110b5bd2fc02a4bcb6c</sys_id>
+            <sys_mod_count>3</sys_mod_count>
+            <sys_name>Sign on bonus amount</sys_name>
+            <sys_package display_value="HR Offer Application" source="x_snc_hr_offer_a_0">5b18c2861bede59088c964a5ec4bcbdc</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="HR Offer Application">5b18c2861bede59088c964a5ec4bcbdc</sys_scope>
+            <sys_update_name>sys_documentation_x_snc_hr_offer_a_0_sign_on_grid_by_career_level_sign_on_bonus_amount_en</sys_update_name>
+            <sys_updated_by>workflow.factory</sys_updated_by>
+            <sys_updated_on>2023-03-28 13:06:41</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

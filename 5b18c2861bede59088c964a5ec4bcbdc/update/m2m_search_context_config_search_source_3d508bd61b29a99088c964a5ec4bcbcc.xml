@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_search_context_config_search_source">
+    <m2m_search_context_config_search_source action="INSERT_OR_UPDATE">
+        <order>400</order>
+        <search_context_config display_value="HR Offer Application - Workspace Search">7a30c3d61029a990fe23a9f661382f5a</search_context_config>
+        <source display_value="HR Offer Application - x_snc_hr_offer_a_0_salary_r">3c508bd61b29a99088c964a5ec4bcb4c</source>
+        <sys_class_name>m2m_search_context_config_search_source</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-03-15 15:26:14</sys_created_on>
+        <sys_id>3d508bd61b29a99088c964a5ec4bcbcc</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name/>
+        <sys_package display_value="HR Offer Application" source="x_snc_hr_offer_a_0">5b18c2861bede59088c964a5ec4bcbdc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offer Application">5b18c2861bede59088c964a5ec4bcbdc</sys_scope>
+        <sys_update_name>m2m_search_context_config_search_source_3d508bd61b29a99088c964a5ec4bcbcc</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-03-15 15:26:14</sys_updated_on>
+    </m2m_search_context_config_search_source>
+</record_update>

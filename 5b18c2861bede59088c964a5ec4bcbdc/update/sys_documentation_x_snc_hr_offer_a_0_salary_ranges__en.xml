@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="" label="Salary Ranges" language="en" table="x_snc_hr_offer_a_0_salary_ranges">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element/>
+            <help/>
+            <hint/>
+            <label>Salary Ranges</label>
+            <language>en</language>
+            <name>x_snc_hr_offer_a_0_salary_ranges</name>
+            <plural>Salary Ranges</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-03-15 13:35:09</sys_created_on>
+            <sys_id>6ee6ee121b65a99088c964a5ec4bcbea</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Salary Ranges</sys_name>
+            <sys_package display_value="HR Offer Application" source="x_snc_hr_offer_a_0">5b18c2861bede59088c964a5ec4bcbdc</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="HR Offer Application">5b18c2861bede59088c964a5ec4bcbdc</sys_scope>
+            <sys_update_name>sys_documentation_x_snc_hr_offer_a_0_salary_ranges__en</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-03-15 13:35:09</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

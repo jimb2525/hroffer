@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_rte_eb_etl_field">
+    <sys_rte_eb_etl_field action="INSERT_OR_UPDATE">
+        <coalesce>false</coalesce>
+        <coercion_action>create</coercion_action>
+        <field>original_hire_date</field>
+        <name>Original Hire Date</name>
+        <sys_class_name>sys_rte_eb_etl_field</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-03-14 23:04:45</sys_created_on>
+        <sys_id>60bf1fce1ba9299088c964a5ec4bcb53</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Original Hire Date</sys_name>
+        <sys_package display_value="HR Offer Application" source="x_snc_hr_offer_a_0">5b18c2861bede59088c964a5ec4bcbdc</sys_package>
+        <sys_policy/>
+        <sys_rte_eb_definition display_value="Roster Import_etl_ihub">58bfd38e1ba9299088c964a5ec4bcb68</sys_rte_eb_definition>
+        <sys_rte_eb_entity display_value="Target_x_snc_hr_offer_a_0_roster">60bf1fce1ba9299088c964a5ec4bcb02</sys_rte_eb_entity>
+        <sys_scope display_value="HR Offer Application">5b18c2861bede59088c964a5ec4bcbdc</sys_scope>
+        <sys_update_name>sys_rte_eb_etl_field_60bf1fce1ba9299088c964a5ec4bcb53</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-03-14 23:04:45</sys_updated_on>
+    </sys_rte_eb_etl_field>
+</record_update>

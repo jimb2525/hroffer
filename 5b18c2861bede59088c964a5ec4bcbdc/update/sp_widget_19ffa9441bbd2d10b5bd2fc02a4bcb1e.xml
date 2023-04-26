@@ -22,7 +22,9 @@
 		if (parms.field.name == 'job_selected') {
 			c.data.job_id = parms.newValue;
 			c.data.action = 'get_c_level';
-			c.server.update();
+			c.server.update().then(function() {
+				$scope.sign_on_bonus_amount.value = '';
+			});
 		}
 	});
 
@@ -37,6 +39,7 @@
 			return;
 		}
 
+		c.data.sign_on_bonus_amount = $scope.sign_on_bonus_amount.value;
 		c.data.action = 'update_tool';
 		c.data.job_description = $scope.job_selected.displayValue;
 		c.data.job_id = $scope.job_selected.value;
@@ -46,10 +49,10 @@
 		c.data.bonus = $scope.bonus;
 		c.server.update().then(function(response) {
 			//spUtil.update($scope);
+			console.log('this is data: ', c.data)
 		})
 
 	}
-
 };]]></client_script>
         <controller_as>c</controller_as>
         <css>$brand-primary: #1c49c2;
@@ -169,35 +172,68 @@ th {
 	/* e.g., data.table = $sp.getValue('table'); */
 
 	data.updated = false;
-	
+
 	function getEligibility(career_level) {
 		var eligibilityGR = new GlideRecord('x_snc_hr_offer_a_0_career_level_eligibility');
 		eligibilityGR.addEncodedQuery('level=' + career_level);
 		eligibilityGR.query();
 		if (eligibilityGR.next()) {
+
 			var elig = eligibilityGR.getValue('eligible');
-			var temp = {};
-			temp.sti_eligible = elig == false ? 'This role is not eligible for an annual STI award.' : getSTI(career_level);
-			temp.bonus_eligible = elig == false ? 'This role is not eligible for a quarterly bonus.' : getBonus(career_level);
-			temp.sti_eligibility = false;
+			var temp = '';
+			temp = elig == 0 ? 'This role is not eligible for a quarterly bonus.' : getBonus(career_level);
 			return temp;
 		}
 	}
-	
+
 	function getSTI(career_level) {
-		// Add logic to return right STI level
-		return '';
+		var level = career_level.split('C')[1];
+		if (level < 8) {
+			data.sti = false;
+			data.sti_amount = 0;
+			return 'This role is not eligible for an annual STI award.'
+		} else {
+			data.sti = true;
+			data.sti_amount = parseInt(input.base_salary) * 0.20;
+			// add dif scenearios for other career levels. This one is hardcorded to C08
+			return '20%';
+		}
 	}
-	
+
 	function getBonus(career_level) {
-		// Add logic to return right bonus level
-		return '';
+		if (input.location_id == 'FLL3') {
+			data.bonus = true;
+			return 'This role is not eligible for a quarterly bonus.';
+		}
+
+		var bonusGR = new GlideRecord('x_snc_hr_offer_a_0_bonus_eligibility');
+		bonusGR.addQuery('job_title_description=' + data.job_sys_id);
+		bonusGR.query();
+		if (bonusGR.next()) {
+			var level = career_level.split('C')[1];
+			if (level >= 8) {
+				return 'STI recipients are not eligible for a quarterly bonus.'
+			} else {
+				var result = bonusGR.getDisplayValue('percent');
+				if (result == '50% Commission') {
+					data.bonus_amount = parseInt(input.base_salary) * 0.5;
+				} else if (result == '10% MBO Tech Bonus Eligible') {
+					data.bonus_amount = parseInt(input.base_salary) * 0.1;
+				} else {
+					data.bonus_amount = 0;
+				}
+				return result;
+			}
+		} else {
+			data.bonus_amount = 0;
+			return 'This role is not eligible for a quarterly bonus.'
+		}
 	}
 
 	function getSalaryRange(grade, location) {
 		var temp = {};
 		var salaryGR = new GlideRecord('x_snc_hr_offer_a_0_salary_ranges');
-		salaryGR.addEncodedQuery('grade=' + grade + '^key=' + location);
+		salaryGR.addEncodedQuery('grade=' + grade + '^structure=' + location);
 		salaryGR.query();
 		if (salaryGR.next()) {
 			temp.min = salaryGR.getDisplayValue('q1_minimum').split('$')[1];
@@ -213,11 +249,13 @@ th {
 		jobGR.addQuery('sys_id', input.job_id);
 		jobGR.query();
 		if (jobGR.next()) {
-			var level = jobGR.getDisplayValue('c_level').split('C')[1];
-			if (level < 4) {
+			data.c_level = jobGR.getDisplayValue('c_level');
+			var level = data.c_level.split('C')[1];
+			if (level < 4 || level > 7) {
 				data.bonus_disabled = true;
 			} else {
 				data.bonus_disabled = false;
+				data.bonus_query = 'career_level=' + data.c_level;
 			}
 		}
 	}
@@ -230,28 +268,35 @@ th {
 		jobGR.addQuery('sys_id', input.job_id);
 		jobGR.query();
 		if (jobGR.next()) {
+			data.job_sys_id = jobGR.getUniqueValue();
 			data.career_level = jobGR.getDisplayValue('c_level');
 			data.job_category = jobGR.getDisplayValue('job_category');
 			data.grade = jobGR.getDisplayValue('grade');
 			data.equity = jobGR.getValue('equity');
 		}		
 
-		data.eligibility = getEligibility(data.career_level);
+		data.sti_eligible = getSTI(data.career_level);
+		data.bonus_eligible = getEligibility(data.career_level);
+
 		data.base_salary_range = getSalaryRange(data.grade, input.location_id);
 
-		if (data.equity) {
-			data.lti_annual_grant = 11;			
-			data.new_hire_lti_grant = (Math.ceil(data.lti_annual_grant * input.base_salary));
-
+		if (data.equity == 1) {
+			data.lti_annual_grant = 11; 
+			data.new_hire_lti_grant = (Math.ceil(data.lti_annual_grant * input.base_salary))/100;
+			data.new_hire_lti_grant_amount = (Math.ceil(data.lti_annual_grant * input.base_salary))/100;
 		} else {
 			data.lti_annual_grant = 'This role is not eligible for equity.';
 			data.new_hire_lti_grant = 'This role is not eligible for equity.';
-
+			data.new_hire_lti_grant_amount = 0;
 		}
 
-		if (data.equity && data.eligibility.bonus_eligible) {
-			data.target_total_comp = parseInt(input.base_salary) + parseInt(data.new_hire_lti_grant) + parseInt(data.bridge_lti_grant);
+		if (input.sign_on_bonus_amount != '') {
+			data.sign_on_bonus = input.sign_on_bonus_amount.split('$')[1]
+		} else {
+			data.sign_on_bonus = 0;
 		}
+		
+		data.target_total_comp = parseInt(input.base_salary) + parseInt(data.sign_on_bonus) + parseInt(data.new_hire_lti_grant_amount) + parseInt(data.bridge_lti_grant) + parseInt(data.sti_amount) + parseInt(data.bonus_amount);
 
 		/* # of rows that have title and location code - Roster table */
 		data.role_and_location = '';
@@ -263,7 +308,7 @@ th {
 
 
 		var rosterGR = new GlideAggregate('x_snc_hr_offer_a_0_roster');
-		rosterGR.addEncodedQuery('job_function_description=' + input.job_description + '^location_code=' + input.location_id);
+		rosterGR.addEncodedQuery('job_title_description=' + input.job_description + '^location_code=' + input.location_id);
 		rosterGR.addAggregate('COUNT');
 		rosterGR.query();
 		if (rosterGR.next()) {
@@ -275,12 +320,41 @@ th {
 
 		if (input.job_description != '' && !input.location_id.includes('SEA1')) {
 			//add calculation;
+			/* get job function from job catalog table */
+			var jobFunction;
+			var jobFuncGR = new GlideRecord('x_snc_hr_offer_a_0_job_catalogue');
+			jobFuncGR.addQuery('default_job_title=' + input.job_description);
+			jobFuncGR.query();
+			if (jobFuncGR.next()) {
+				jobFunction = jobFuncGR.getDisplayValue('function');
+				data.dataSc = jobFuncGR.getDisplayValue('data_scientist');
+				pilotProgram = jobFuncGR.getDisplayValue('pilot_program');
+			}
+
+			/* # of rows that have the GRADE & Consumer business service function & false in pilot program in Roster table */
+			var gradeFunctionGR = new GlideAggregate('x_snc_hr_offer_a_0_roster');
+			gradeFunctionGR.addEncodedQuery('compensation_grade=' + data.grade + '^business_function=' + jobFunction + '^pilot_program=true');
+			gradeFunctionGR.addAggregate('COUNT');
+			gradeFunctionGR.query();
+			if (gradeFunctionGR.next()) {
+				data.comp_grade_and_function = gradeFunctionGR.getAggregate('COUNT');
+			}
+
+			/*calculate comp grade and unit by looking first at the value of data scientist */
+			var gradeUnitFunctionGR = new GlideAggregate('x_snc_hr_offer_a_0_roster');
+			gradeUnitFunctionGR.addEncodedQuery('compensation_grade=' + data.grade + '^business_unit=' + data.dataSc + '^pilot_program=true');
+			gradeUnitFunctionGR.addAggregate('COUNT');
+			gradeUnitFunctionGR.query();
+			if (gradeUnitFunctionGR.next()) {
+				data.comp_grade_and_unit = gradeUnitFunctionGR.getAggregate('COUNT');
+			}
+			
 		}
 
 		if (!seatleBased) {
 			/* # of rows that have the title and false in the Pilot Program column in roster table */
 			var rolesGR = new GlideAggregate('x_snc_hr_offer_a_0_roster');
-			rolesGR.addEncodedQuery('job_title_description' + input.job_description + '^pilot_program=false');
+			rolesGR.addEncodedQuery('job_title_description=' + input.job_description + '^pilot_program=false');
 			rolesGR.addAggregate('COUNT');
 			rolesGR.query();
 			if (rolesGR.next()) {
@@ -320,35 +394,41 @@ th {
 			} else if (data.role >= 3) {
 				data.population_used = 'R'
 			} else {
-				data.population_used = 'R - this should be empty. I put 3 to meet the condition and run the calculations'; /**** THIS SHOULD BE AN EMPTY STRING ****/
+				data.population_used = '';
 			}
+
+			var count = 0;
+			data.salaries = [];
+			var salariesTotal = 0;
 
 			/* Calculate middle table values */
 			if (data.population_used == '') {
-				data.minimum = 'if population used is empty, minimum is empty.';
-				data.quarter = 'if population used is empty, minimum is empty.';
-				data.median = 'if population used is empty, minimum is empty.';
-				data.mean = 'if population used is empty, minimum is empty.';
-				data.three=quarters = 'if population used is empty, minimum is empty.';
-				data.maximum = 'if population used is empty, minimum is empty.';
+				//if pop used is empty, all these values all also empty
+				data.minimum = '-';
+				data.quarter = '-';
+				data.median = '-';
+				data.mean = '-';
+				data.three_quarters = '-';
+				data.maximum = '-';
+				data.median_by = '';
+				data.median_by_message = '';
+				data.internal_by = '';
+				data.internal_by_message = '';
 			} else {
-				var count = 0;
-				var salaries = [];
-				var salariesTotal = 0;
 				var rosterTableGR = new GlideRecord('x_snc_hr_offer_a_0_roster');
-				rosterTableGR.addEncodedQuery('include_incumbent_data=true');
+				rosterTableGR.addEncodedQuery('job_title_description=' + input.job_description);
 				rosterTableGR.orderBy('nationalized_salary');
 				rosterTableGR.query();
 				while (rosterTableGR.next()) {
 					if (count == 0) {
 						data.nationalized_salary = parseInt(rosterTableGR.getDisplayValue('nationalized_salary').split('$')[1]);
 					}
-					var salary = rosterTableGR.getDisplayValue('nationalized_salary').split('$')[1];
+					var salary = parseInt(rosterTableGR.getDisplayValue('nationalized_salary').split('$')[1]);
 					salariesTotal += salary;
-					salaries.push(salary);
+					data.salaries.push(salary);
 					count++;
 				}
-				
+
 				var colGR = new GlideRecord('x_snc_hr_offer_a_0_cost_of_living');
 				colGR.addQuery('structure_name=' + input.location_id);
 				colGR.orderBy('location_code');
@@ -356,45 +436,53 @@ th {
 				if (colGR.next()) {
 					data.cost_of_living = colGR.getDisplayValue('percent_of_national')/100;
 				}
-				
-				data.minimum = data.nationalized_salary * data.cost_of_living;
-				
-				var demoSalaries = ['0.33', '265', '265', '268.33', '356.67'];
-				var demoSalariesTotal = 1155.33;
-				var demoCount = 5;
-				var quarter_position = 0.25 * (demoCount + 1);
-				var three_q_position = 0.75 * (demoCount + 1)
-				var regex = /^[0-9]*$/;
-				if (regex.test(quarter_position)) {
-					data.quarter_salary = demoSalaries[quarter_position];
-					data.three_quarters_salary = demoSalaries[three_q_position];
-				} else {
-					var roundUpQ = Math.ceil(quarter_position) -1 ;
-					var roundDownQ = Math.floor(quarter_position) - 1;
-					data.quarter_salary = (parseInt(demoSalaries[roundUpQ]) + parseInt(demoSalaries[roundDownQ])) / 2;
-					
-					var roundUp3Q = Math.ceil(three_q_position) -1 ;
-					var roundDown3Q = Math.floor(three_q_position) - 1;
-					data.three_quarters_salary = (parseInt(demoSalaries[roundUp3Q]) + parseInt(demoSalaries[roundDown3Q])) / 2;
+
+				if (data.salaries.length > 0) {
+					data.minimum = data.nationalized_salary * data.cost_of_living || 0;
+
+
+					//var demoSalaries = ['0.33', '265', '265', '268.33', '356.67'];
+					//var demoSalariesTotal = 1155.33;
+					//var demoCount = 5;
+					var quarter_position = 0.25 * (count + 1);
+					var three_q_position = 0.75 * (count + 1)
+					var regex = /^[0-9]*$/;
+					if (regex.test(quarter_position)) {
+						data.quarter_salary = data.salaries[quarter_position];
+						data.three_quarters_salary = data.salaries[three_q_position];
+					} else {
+						var roundUpQ = Math.ceil(quarter_position) -1 ;
+						var roundDownQ = Math.floor(quarter_position) - 1;
+						data.quarter_salary = (parseInt(data.salaries[roundUpQ]) + parseInt(data.salaries[roundDownQ])) / 2;
+
+						var roundUp3Q = Math.ceil(three_q_position) -1 ;
+						var roundDown3Q = Math.floor(three_q_position) - 1;
+						data.three_quarters_salary = (parseInt(data.salaries[roundUp3Q]) + parseInt(data.salaries[roundDown3Q])) / 2;
+					}
+
+					data.quarter = Math.floor(data.quarter_salary * data.cost_of_living);
+					data.three_quarters = Math.floor(data.three_quarters_salary * data.cost_of_living);
+
+					if (count % 2 == 0) {
+						var medianTopPosition = Math.ceil(count/2);
+						var medianBottomPosition = Math.floor(count/2);
+						data.medianSalary = (data.salaries[medianTopPosition] + data.salaries[medianBottomPosition]) / 2;
+					} else {
+						var medianPosition = Math.floor(count/2);
+						data.medianSalary = data.salaries[medianPosition];
+					}
+
+					data.median = Math.ceil(data.medianSalary * data.cost_of_living);
+					data.mean = Math.floor((salariesTotal / count) * data.cost_of_living); 
+					data.maximum = Math.ceil(data.salaries[data.salaries.length - 1] * data.cost_of_living);
 				}
-				
-				data.quarter = Math.floor(data.quarter_salary * data.cost_of_living);
-				data.three_quarters = Math.floor(data.three_quarters_salary * data.cost_of_living);
-				
-				if (demoCount % 2 == 0) {
-					var medianTopPosition = Math.ceil(demoCount/2);
-					var medianBottomPosition = Math.floor(demoCount/2);
-					data.medianSalary = (demoSalaries[medianTopPosition] + demoSalaries[medianBottomPosition]) / 2;
+
+				if (data.medianSalary == 0) {
+					data.median_by = 0;
 				} else {
-					var medianPosition = Math.floor(demoCount/2);
-					data.medianSalary = demoSalaries[medianPosition];
+					data.median_by = (((input.base_salary / (data.medianSalary * data.cost_of_living)) -1) * 100).toFixed(2);
 				}
-				
-				data.median = Math.ceil(data.medianSalary * data.cost_of_living);
-				data.mean = Math.floor((demoSalariesTotal / demoCount) * data.cost_of_living); 
-				data.maximum = Math.ceil(demoSalaries[demoSalaries.length - 1] * data.cost_of_living);
-			
-				data.median_by = (((input.base_salary / (data.medianSalary * data.cost_of_living)) -1) * 100).toFixed(2);
+
 				if (data.median_by > 0) {
 					data.median_by_message = 'The Proposed Base Salary is Higher than the Internal Median by:'
 					data.median_higher = true;
@@ -402,8 +490,13 @@ th {
 					data.median_higher = false;
 					data.median_by_message = 'The Proposed Base Salary is Lower than the Internal Median by:'
 				}
+
+				if (data.three_quarters_salary == 0) {
+					data.internal_by = 0;	
+				} else {
+					data.internal_by = (((input.base_salary / (data.three_quarters_salary * data.cost_of_living)) -1) * 100).toFixed((2));
+				}
 				
-				data.internal_by = (((input.base_salary / (data.three_quarters_salary * data.cost_of_living)) -1) * 100).toFixed((2));
 				if (data.internal_by > 0) {
 					data.internal_higher = true;
 					data.internal_by_message = 'The Proposed Base Salary is Higher than the Internal 75th Percentile by:'
@@ -411,38 +504,20 @@ th {
 					data.internal_higher = false;
 					data.internal_by_message = 'The Proposed Base Salary is Lower than the Internal 75th Percentile by:'
 				}
-				
-				data.base_midpoint = (((input.base_salary / data.base_salary_range.mid) -1) * 100).toFixed(2);
-				if (data.base_midpoint > 0) {
-					data.base_midpoint_message = 'The Proposed Base Salary is Higher than the Base Salary Range Midpoint by:';
-					data.base_midpoint_higher = true;
-				} else {
-					data.base_midpoint_higher = false;
-					data.base_midpoint_message = 'The Proposed Base Salary is Lower than the Base Salary Range Midpoint by:';
-				}
-				
-				
+
+			}
+
+			data.base_midpoint = (((input.base_salary / data.base_salary_range.mid) -1) * 100).toFixed(2);
+
+			if (data.base_midpoint > 0) {
+				data.base_midpoint_message = 'The Proposed Base Salary is Higher than the Base Salary Range Midpoint by:';
+				data.base_midpoint_higher = true;
+			} else {
+				data.base_midpoint_higher = false;
+				data.base_midpoint_message = 'The Proposed Base Salary is Lower than the Base Salary Range Midpoint by:';
 			}
 
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	}
 })();]]></script>
@@ -451,14 +526,14 @@ th {
         <sys_created_by>workflow.factory</sys_created_by>
         <sys_created_on>2023-03-20 20:06:43</sys_created_on>
         <sys_id>19ffa9441bbd2d10b5bd2fc02a4bcb1e</sys_id>
-        <sys_mod_count>205</sys_mod_count>
+        <sys_mod_count>273</sys_mod_count>
         <sys_name>Review Job Offer Widget</sys_name>
         <sys_package display_value="HR Offer Application" source="x_snc_hr_offer_a_0">5b18c2861bede59088c964a5ec4bcbdc</sys_package>
         <sys_policy/>
         <sys_scope display_value="HR Offer Application">5b18c2861bede59088c964a5ec4bcbdc</sys_scope>
         <sys_update_name>sp_widget_19ffa9441bbd2d10b5bd2fc02a4bcb1e</sys_update_name>
-        <sys_updated_by>workflow.factory</sys_updated_by>
-        <sys_updated_on>2023-03-27 16:29:43</sys_updated_on>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-04-06 13:03:48</sys_updated_on>
         <template><![CDATA[<h3 style="color: $brand-primary;">
   Offer Tool
 </h3>
@@ -509,12 +584,11 @@ th {
                                   search-fields="'location_code'"
                                   page-size="30"
                                   value-field="'structure_name'"
-                                  default-query=""
                                   placeholder="${Select a Location}">
               </sn-record-picker></td>
           </tr>
           <tr class="input-row">
-            <th>Base Salary</th>
+            <th>Base Salary ($)</th>
             <td><input type="text" id="base_salary" name="base_salary" ng-model="base_salary" placeholder="Enter Proposed Based Salary"></td>
           </tr>
           <tr class="input-row">
@@ -522,18 +596,19 @@ th {
             <td><input type="text" id="lti_grant" name="lti_grant" ng-model="lti_grant" placeholder="Enter Bridge Award"></td>
           </tr>
           <tr class="input-row">
-            <th>Sign on Bonus</th>
+            <th>Sign on Bonus ($)</th>
             <!--<td><input type="text" id="bonus" name="bonus" ng-model="bonus" placeholder="Select a Sign on Bonus"></td>-->
             <td><sn-record-picker 
                                   sn-disabled="data.bonus_disabled"
-                                  id="location"
-                                  field="location" 
-                                  table="'x_snc_hr_offer_a_0_cost_of_living'" 
-                                  display-field="'location_code'" 
-                                  search-fields="'location_code'"
+                                  sn-model="sign_on_bonus_amount"
+                                  id="sign_on_bonus_amount"
+                                  field="sign_on_bonus_amount" 
+                                  table="'x_snc_hr_offer_a_0_sign_on_grid_by_career_level'" 
+                                  display-field="'sign_on_bonus_amount'" 
+                                  search-fields="'sign_on_bonus_amount'"
                                   page-size="30"
-                                  value-field="'structure_name'"
-                                  default-query=""
+                                  value-field="'sign_on_bonus_amount'"
+                                  default-query="data.bonus_query"
                                   placeholder="${Select a Sign on Bonus}">
               </sn-record-picker></td>
           </tr>
@@ -543,11 +618,11 @@ th {
           </tr>
           <tr>
             <th>New Hire LTI Grant $</th>
-            <td><span ng-if="data.updated">$</span>{{data.new_hire_lti_grant}}</td>
+            <td><span ng-if="data.updated && data.equity == 1">$</span>{{data.new_hire_lti_grant}}</td>
           </tr>
           <tr>
             <th>LTI Annual Grant %</th>
-            <td>{{data.lti_annual_grant}}<span ng-if="data.updated">%</span></td>
+            <td>{{data.lti_annual_grant}}<span ng-if="data.updated && data.equity == 1">%</span></td>
           </tr>
           <tr>
             <th>Bridge LTI Grant $</th>
@@ -555,11 +630,11 @@ th {
           </tr>
           <tr>
             <th>STI %</th>
-            <td>{{data.eligibility.sti_eligible}}</td>
+            <td>{{data.sti_eligible}}</td>
           </tr>
           <tr>
             <th>Bonus %</th>
-            <td>{{data.eligibility.bonus_eligible}}</td>
+            <td>{{data.bonus_eligible}}</td>
           </tr>
           <tr>
             <th>Career Level</th>
@@ -772,7 +847,6 @@ th {
     </div>
   </div>
 </div>
-
 <!--
 <div style="font-weight: bold;">
   <p>
@@ -797,18 +871,6 @@ th {
     Population used: {{data.population_used}}
   </p>
 </div>
--->
-
-
-
-
-
-
-
-
-
-
-
-]]></template>
+-->]]></template>
     </sp_widget>
 </record_update>

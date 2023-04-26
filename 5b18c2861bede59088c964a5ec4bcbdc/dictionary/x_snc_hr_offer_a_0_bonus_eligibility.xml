@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Bonus Eligibility" max_length="40" name="x_snc_hr_offer_a_0_bonus_eligibility" sizeclass="68" type="collection">
+        <element attributes="encode_utf8=false" label="Job Title Description" max_length="32" name="job_title_description" reference="x_snc_hr_offer_a_0_job_catalogue" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" label="Percent" max_length="40" name="percent" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="10% MBO Tech Bonus Eligible" value="10_mbo_tech_bonus_eligible"/>
+                <element inactive_on_update="false" label="20% Commission" value="20_commission"/>
+                <element inactive_on_update="false" label="50% Commission" value="50_commission"/>
+            </choice>
+        </element>
+        <index name="index">
+            <element name="job_title_description"/>
+        </index>
+    </element>
+</database>

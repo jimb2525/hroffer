@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="LTI Percent" max_length="40" name="x_snc_hr_offer_a_0_lti_percent" sizeclass="13" type="collection">
+        <element label="Eligible" max_length="40" name="eligible" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" label="Level" max_length="40" name="level" type="string"/>
+        <element label="LTI%" max_length="40" name="lti" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
+    </element>
+</database>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Seattle Pilot" max_length="40" name="x_snc_hr_offer_a_0_seattle_pilot" sizeclass="5" type="collection">
+        <element attributes="omit_sys_original=true" label="Base Salary" max_length="20" name="base_salary" type="currency"/>
+        <element label="Bridge" max_length="40" name="bridge" type="integer"/>
+        <element label="LTI" max_length="40" name="lti" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Seattle Pilot" max_length="40" name="seattle_pilot" type="string"/>
+        <element attributes="omit_sys_original=true" label="Sign-on" max_length="20" name="sign_on" type="currency"/>
+    </element>
+</database>

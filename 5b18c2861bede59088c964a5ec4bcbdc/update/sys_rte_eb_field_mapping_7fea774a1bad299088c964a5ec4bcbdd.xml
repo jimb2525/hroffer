@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_rte_eb_field_mapping">
+    <sys_rte_eb_field_mapping action="INSERT_OR_UPDATE">
+        <order>100</order>
+        <referenced_sys_rte_eb_entity/>
+        <source_sys_rte_eb_field display_value="%">94ea3b0a1bad299088c964a5ec4bcbb8</source_sys_rte_eb_field>
+        <sys_class_name>sys_rte_eb_field_mapping</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-03-15 01:03:45</sys_created_on>
+        <sys_id>7fea774a1bad299088c964a5ec4bcbdd</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name/>
+        <sys_package display_value="HR Offer Application" source="x_snc_hr_offer_a_0">5b18c2861bede59088c964a5ec4bcbdc</sys_package>
+        <sys_policy/>
+        <sys_rte_eb_definition display_value="Bonus Eligibility Import_etl_ihub">98ea3b0a1bad299088c964a5ec4bcbb0</sys_rte_eb_definition>
+        <sys_rte_eb_entity_mapping display_value="IHUB_SOURCE_TEMP_MAPPING">3bea774a1bad299088c964a5ec4bcbdb</sys_rte_eb_entity_mapping>
+        <sys_scope display_value="HR Offer Application">5b18c2861bede59088c964a5ec4bcbdc</sys_scope>
+        <sys_update_name>sys_rte_eb_field_mapping_7fea774a1bad299088c964a5ec4bcbdd</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-03-15 01:03:45</sys_updated_on>
+        <target_sys_rte_eb_field display_value="%_sn_ihub_target_percent">27ea774a1bad299088c964a5ec4bcbc5</target_sys_rte_eb_field>
+    </sys_rte_eb_field_mapping>
+</record_update>

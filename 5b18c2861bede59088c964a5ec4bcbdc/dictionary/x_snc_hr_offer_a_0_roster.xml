@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Roster" max_length="40" name="x_snc_hr_offer_a_0_roster" sizeclass="8126" text_index="true" type="collection">
+        <element attributes="omit_sys_original=true" label="Annual Salary" max_length="20" name="annual_salary" type="currency"/>
+        <element attributes="edge_encryption_enabled=true" label="Business Function" max_length="100" name="business_function" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Business Unit" max_length="100" name="business_unit" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Compensation Grade" max_length="40" name="compensation_grade" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="C Level" max_length="40" name="c_level" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="File Number" max_length="40" name="file_number" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Home Department Code" max_length="40" name="home_department_code" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Home Department Description" max_length="100" name="home_department_description" type="string"/>
+        <element label="Include Incumbent Data?" max_length="40" name="include_incumbent_data" type="boolean"/>
+        <element label="Is Rehire" max_length="40" name="is_rehire" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" label="Job Function Description" max_length="100" name="job_function_description" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Job Title Code" max_length="40" name="job_title_code" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Job Title Description" max_length="100" name="job_title_description" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Location Code" max_length="40" name="location_code" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Location Description" max_length="40" name="location_description" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Most Recent Hire Date" max_length="40" name="most_recent_hire_date" type="glide_date"/>
+        <element attributes="omit_sys_original=true" label="Nationalized Salary" max_length="20" name="nationalized_salary" type="currency"/>
+        <element attributes="edge_encryption_enabled=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Original Hire Date" max_length="40" name="original_hire_date" type="glide_date"/>
+        <element attributes="edge_encryption_enabled=true" label="Pay Frequency" max_length="40" name="pay_frequency" type="string"/>
+        <element label="Pilot Program?" max_length="40" name="pilot_program" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" label="Position Start Date" max_length="40" name="position_start_date" type="glide_date"/>
+        <element attributes="edge_encryption_enabled=true" label="Position Status" max_length="40" name="position_status" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Reports to File Num" max_length="40" name="reports_to_file_num" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Reports To Name" max_length="40" name="reports_to_name" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Worker Category Code" max_length="40" name="worker_category_code" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Worker Category Description" max_length="40" name="worker_category_description" type="string"/>
+        <element label="Work Contact: Work Email" max_length="40" name="work_contact_work_email" type="email"/>
+    </element>
+</database>
